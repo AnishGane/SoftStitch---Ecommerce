@@ -24,7 +24,7 @@ productRouter.post(
 // productRouter.delete("/remove/:id", removeProduct);
 productRouter.post("/remove", removeProduct);
 // Route to list all products
-productRouter.post("/list", listProducts);
+productRouter.get("/list", listProducts);
 // Route to get a single product by ID
 // productRouter.get("/single/:id", singleProduct);
 productRouter.post("/single", singleProduct);

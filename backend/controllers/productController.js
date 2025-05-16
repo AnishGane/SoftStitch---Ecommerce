@@ -15,14 +15,21 @@ const addProduct = async (req, res) => {
     } = req.body;
 
     // Getting the 4 images
-    const image1 = req.files.image1 && req.files.image1[0];
-    const image2 = req.files.image2 && req.files.image2[0];
-    const image3 = req.files.image3 && req.files.image3[0];
-    const image4 = req.files.image4 && req.files.image4[0];
+    const image1 = req.files?.image1?.[0];
+    const image2 = req.files?.image2?.[0];
+    const image3 = req.files?.image3?.[0];
+    const image4 = req.files?.image4?.[0];
 
     const images = [image1, image2, image3, image4].filter(
       (item) => item != undefined
     );
+
+    if (images.length === 0) {
+      return res.json({
+        message: "At least one image is required",
+        success: false,
+      });
+    }
 
     // Creating the image url to be sent in image field with help of cloudinary
     let image_url = await Promise.all(
@@ -43,22 +50,13 @@ const addProduct = async (req, res) => {
       price: Number(price),
       bestseller: bestseller == "true" ? true : false,
       sizes: JSON.parse(sizes),
-      images: image_url,
+      image: image_url,
       date: Date.now(),
     };
 
     const product = new productModel(productData);
     await product.save();
 
-    // console.log(
-    //   name,
-    //   description,
-    //   category,
-    //   subCategory,
-    //   price,
-    //   sizes,
-    //   bestseller
-    // );
     // console.log(image_url);
 
     res.json({ success: true, message: "Product added successfully" });
@@ -72,10 +70,50 @@ const addProduct = async (req, res) => {
 };
 
 // Function to remove products
-const removeProduct = async (req, res) => {};
+const removeProduct = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    // Find the product by ID and delete it
+    const product = await productModel.findByIdAndDelete(id);
+
+    if (!product) {
+      return res.json({
+        message: "Product not found",
+        success: false,
+      });
+    }
+
+    res.json({
+      message: "Product removed successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.log("Error in removing product:", error);
+    res.json({
+      message: `Error in removing product: ${error.message}`,
+      success: false,
+    });
+  }
+};
 
 // Function to list the products
-const listProducts = async (req, res) => {};
+const listProducts = async (req, res) => {
+  try {
+    const products = await productModel.find({});
+    res.json({
+      success: "true",
+      message: "Products fetched successfully",
+      products,
+    });
+  } catch (error) {
+    console.log("Error in listing products:", error);
+    res.json({
+      message: `Error in listing products: ${error.message}`,
+      success: false,
+    });
+  }
+};
 
 // Function for single products info
 const singleProduct = async (req, res) => {};

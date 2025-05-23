@@ -14,6 +14,7 @@ const ShopContextProvider = (props) => {
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
   const [products, setProducts] = useState([]);
+  const [token, setToken] = useState("");
   const navigate = useNavigate();
 
   /**
@@ -66,13 +67,13 @@ const ShopContextProvider = (props) => {
     return totalCount;
   };
 
-  const getCartAmount =  () => {
+  const getCartAmount = () => {
     let totalAmount = 0;
-    for(const item in cartItems){
+    for (const item in cartItems) {
       let itemsInfo = products.find((product) => product._id === item);
-      for(const size in cartItems[item]){
+      for (const size in cartItems[item]) {
         try {
-          if(cartItems[item][size] > 0){
+          if (cartItems[item][size] > 0) {
             totalAmount += cartItems[item][size] * itemsInfo.price;
           }
         } catch (error) {
@@ -81,16 +82,15 @@ const ShopContextProvider = (props) => {
       }
     }
     return totalAmount;
-  }
+  };
 
   const updateQuantity = async (itemId, size, quantity) => {
-
     let cartData = structuredClone(cartItems);
-    
+
     if (quantity === 0) {
       // Remove the size entry if quantity is 0
       delete cartData[itemId][size];
-      
+
       // If no sizes left for this item, remove the entire item
       if (Object.keys(cartData[itemId]).length === 0) {
         delete cartData[itemId];
@@ -98,28 +98,36 @@ const ShopContextProvider = (props) => {
     } else {
       cartData[itemId][size] = quantity;
     }
-    
+
     setCartItems(cartData);
   };
 
   const getProductData = async () => {
     try {
-      const response = await axios.get(backendUrl + '/api/product/list');
-      console.log(response.data);
+      // console.log('Fetching products from:', backendUrl + '/api/product/list');
+      const response = await axios.get(backendUrl + "/api/product/list");
+      // console.log('Response status:', response.status);
+      // console.log('Response data:', response.data);
+
       if (response.data.success) {
         setProducts(response.data.products);
       } else {
-        toast.error(response.data.message || 'Failed to fetch products');
+        console.error("API returned error:", response.data.message);
+        toast.error(response.data.message || "Failed to fetch products");
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
-      toast.error('Failed to load products. Please try again later.');
+      console.error("Error details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+      toast.error("Failed to load products. Please try again later.");
     }
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     getProductData();
-  },[])
+  }, []);
 
   const value = {
     products,
@@ -135,7 +143,9 @@ const ShopContextProvider = (props) => {
     updateQuantity,
     getCartAmount,
     navigate,
-    backendUrl
+    backendUrl,
+    token,
+    setToken,
   };
 
   return (

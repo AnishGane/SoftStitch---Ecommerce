@@ -100,7 +100,7 @@ const removeProduct = async (req, res) => {
 // Function to list the products
 const listProducts = async (req, res) => {
   try {
-    const products = await productModel.find({}).sort({ date: -1 });
+    const products = await productModel.find({});
     if (!products) {
       return res.json({
         success: false,

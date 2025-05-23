@@ -12,9 +12,17 @@ const port = process.env.PORT || 4000;
 connectDB();
 connectCloudinary();
 
+// CORS configuration
+const corsOptions = {
+  origin: ['http://localhost:5173', 'http://localhost:5174'], // Add your frontend URLs
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'token'],
+  credentials: true
+};
+
 //middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 //api endpoint
 

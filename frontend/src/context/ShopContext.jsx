@@ -17,34 +17,70 @@ const ShopContextProvider = (props) => {
   const [token, setToken] = useState("");
   const navigate = useNavigate();
 
-  /**
-   * Adds a product to the shopping cart
-   * @param {string} itemId - The unique identifier of the product
-   * @param {string} size - The selected size of the product
-   */
   const AddToCart = async (itemId, size) => {
     if (!size) {
-      toast.error("Select a size");
+      toast.error("Please select a size");
       return;
     }
-    // Create a deep copy of the current cart to avoid direct state mutation
-    let cartData = structuredClone(cartItems);
-    // Check if this product ID already exists in the cart
-    if (cartData[itemId]) {
-      // If this product exists, check if this specific size exists
-      if (cartData[itemId][size]) {
-        // If this size exists, increment the quantity
-        cartData[itemId][size] += 1;
+
+    // Validate if the product exists
+    const product = products.find((p) => p._id === itemId);
+    if (!product) {
+      toast.error("Product not found");
+      return;
+    }
+
+    // Validate if the size is available for the product
+    if (!product.sizes.includes(size)) {
+      toast.error("Selected size is not available for this product");
+      return;
+    }
+
+    try {
+      // Create a deep copy of the current cart to avoid direct state mutation
+      let cartData = structuredClone(cartItems);
+      // Check if this product ID already exists in the cart
+      if (cartData[itemId]) {
+        // If this product exists, check if this specific size exists
+        if (cartData[itemId][size]) {
+          // If this size exists, increment the quantity
+          cartData[itemId][size] += 1;
+        } else {
+          // If this size doesn't exist, add it with quantity 1
+          cartData[itemId][size] = 1;
+        }
       } else {
-        // If this size doesn't exist, add it with quantity 1
+        // If this product doesn't exist in the cart at all, create a new entry
+        cartData[itemId] = {};
         cartData[itemId][size] = 1;
       }
-    } else {
-      // If this product doesn't exist in the cart at all, create a new entry
-      cartData[itemId] = {};
-      cartData[itemId][size] = 1;
+
+      // If user is logged in, update cart in backend first
+      if (token) {
+        const response = await axios.post(
+          backendUrl + "/api/cart/add",
+          { itemId, size },
+          { headers: { token } }
+        );
+
+        if (!response.data.success) {
+          throw new Error(
+            response.data.message || "Failed to add item to cart"
+          );
+        }
+      }
+
+      // Only update local state after successful API call
+      setCartItems(cartData);
+      toast.success("Item added to cart successfully");
+    } catch (error) {
+      console.error("Add to cart error:", error);
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to add item to cart"
+      );
     }
-    setCartItems(cartData);
   };
 
   // useEffect(() => {
@@ -85,21 +121,46 @@ const ShopContextProvider = (props) => {
   };
 
   const updateQuantity = async (itemId, size, quantity) => {
-    let cartData = structuredClone(cartItems);
+    try {
+      let cartData = structuredClone(cartItems);
 
-    if (quantity === 0) {
-      // Remove the size entry if quantity is 0
-      delete cartData[itemId][size];
+      if (quantity === 0) {
+        // Remove the size entry if quantity is 0
+        delete cartData[itemId][size];
 
-      // If no sizes left for this item, remove the entire item
-      if (Object.keys(cartData[itemId]).length === 0) {
-        delete cartData[itemId];
+        // If no sizes left for this item, remove the entire item
+        if (Object.keys(cartData[itemId]).length === 0) {
+          delete cartData[itemId];
+        }
+      } else {
+        cartData[itemId][size] = quantity;
       }
-    } else {
-      cartData[itemId][size] = quantity;
-    }
 
-    setCartItems(cartData);
+      // If user is logged in, update cart in backend first
+      if (token) {
+        const response = await axios.post(
+          backendUrl + "/api/cart/update",
+          { itemId, size, quantity },
+          { headers: { token } }
+        );
+        if (!response.data.success) {
+          throw new Error(
+            response.data.message || "Failed to Update item to cart"
+          );
+        }
+      }
+
+      // Only update local state after successful API call
+      setCartItems(cartData);
+      toast.success(quantity === 0 ? "Item removed from cart" : "Item quantity updated successfully");
+    } catch (error) {
+      console.error("update to cart error:", error);
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update cart"
+      );
+    }
   };
 
   const getProductData = async () => {
@@ -125,9 +186,28 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  const getUserCart = async (token) => {
+    try {
+      const response = await axios.post(backendUrl + "/api/cart/get", {}, { headers: { token } });
+      if (response.data.success) {
+        setCartItems(response.data.cartData);
+      }
+    } catch (err) {
+      console.log(err.message);
+      toast.error(err.message);
+    }
+  }
+
   useEffect(() => {
     getProductData();
   }, []);
+
+  useEffect(() => {
+    if (!token && localStorage.getItem("token")) {
+      setToken(localStorage.getItem("token"));
+      getUserCart(localStorage.getItem("token"));
+    }
+  }, [token]);
 
   const value = {
     products,
@@ -139,6 +219,7 @@ const ShopContextProvider = (props) => {
     setShowSearch,
     AddToCart,
     cartItems,
+    setCartItems,
     getCartCount,
     updateQuantity,
     getCartAmount,

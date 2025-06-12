@@ -15,7 +15,7 @@ const PlaceOrder = () => {
     cartItems,
     setCartItems,
     getCartAmount,
-    deliveyFee,
+    deliveryFee,
     products,
   } = useContext(ShopContext);
   const [formData, setFormData] = useState({
@@ -60,7 +60,7 @@ const PlaceOrder = () => {
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + deliveyFee,
+        amount: getCartAmount() + deliveryFee,
       };
       switch (method) {
         //api call for COD

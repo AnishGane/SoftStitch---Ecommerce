@@ -1,4 +1,5 @@
 import orderModel from "../models/orderModel.js";
+import userModel from "../models/userModel.js";
 
 //placing order using COD Methood
 const placeOrder = async (req, res) => {
@@ -20,7 +21,7 @@ const placeOrder = async (req, res) => {
     await newOrder.save();
 
     await userModel.findByIdAndUpdate(userId, {
-      cardData: {},
+      cartData: {},
     });
 
     res.json({ success: true, message: "Order Placed" });

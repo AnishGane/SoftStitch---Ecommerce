@@ -43,7 +43,7 @@ const KhaltiPayment = ({ amount, onSuccess, onError }) => {
             },
             onClose: () => {
               console.log('Payment window closed');
-              toast.info('Payment window closed');
+              toast.error('Payment window closed');
               navigate('/payment/cancel');
             }
           }

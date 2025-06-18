@@ -20,7 +20,54 @@ const App = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Toaster position="top-right" />
+      <Toaster 
+        position="bottom-right"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+            borderRadius: '12px',
+            padding: '16px',
+            fontSize: '14px',
+            fontWeight: '500',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+          },
+          success: {
+            duration: 4000,
+            style: {
+              background: 'linear-gradient(135deg, #10B981, #059669)',
+              color: '#fff',
+            },
+            iconTheme: {
+              primary: '#fff',
+              secondary: '#10B981',
+            },
+          },
+          error: {
+            duration: 5000,
+            style: {
+              background: 'linear-gradient(135deg, #EF4444, #DC2626)',
+              color: '#fff',
+            },
+            iconTheme: {
+              primary: '#fff',
+              secondary: '#EF4444',
+            },
+          },
+          loading: {
+            style: {
+              background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
+              color: '#fff',
+            },
+          },
+        }}
+      />
       {token === "" ? (
         <Login setToken={setToken} />
       ) : (

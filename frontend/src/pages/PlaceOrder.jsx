@@ -5,9 +5,11 @@ import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import KhaltiPayment from "../components/KhaltiPayment";
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");
+  const [showKhalti, setShowKhalti] = useState(false);
   const {
     navigate,
     backendUrl,
@@ -37,6 +39,63 @@ const PlaceOrder = () => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
+  const handlePaymentMethodChange = (selectedMethod) => {
+    setMethod(selectedMethod);
+    setShowKhalti(false); // Reset Khalti widget when changing payment method
+  };
+
+  const handleKhaltiSuccess = async (payload) => {
+    try {
+      let orderItems = [];
+
+      for (const items in cartItems) {
+        for (const item in cartItems[items]) {
+          if (cartItems[items][item] > 0) {
+            const itemInfo = structuredClone(
+              products.find((product) => product._id === items)
+            );
+            if (itemInfo) {
+              itemInfo.size = item;
+              itemInfo.quantity = cartItems[items][item];
+              orderItems.push(itemInfo);
+            }
+          }
+        }
+      }
+
+      let orderData = {
+        address: formData,
+        items: orderItems,
+        amount: getCartAmount() + deliveryFee,
+        paymentMethod: "khalti",
+        paymentDetails: payload
+      };
+
+      const response = await axios.post(
+        backendUrl + "/api/order/khalti",
+        orderData,
+        { headers: { token } }
+      );
+
+      if (response.data.success) {
+        setCartItems({}); //clearing cart data
+        toast.success("Payment successful and order placed!");
+        navigate("/orders");
+      } else {
+        toast.error(response.data.message || "Failed to place order");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Payment failed. Please try again.");
+    }
+  };
+
+  const handleKhaltiError = (error) => {
+    console.error("Payment failed:", error);
+    toast.error("Payment failed. Please try again.");
+    setShowKhalti(false); // Hide Khalti widget on error
+  };
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -56,32 +115,35 @@ const PlaceOrder = () => {
           }
         }
       }
-      // console.log(orderItems);
+
       let orderData = {
         address: formData,
         items: orderItems,
         amount: getCartAmount() + deliveryFee,
       };
-      switch (method) {
-        //api call for COD
-        case "cod":
-          const response = await axios.post(
-            backendUrl + "/api/order/place",
-            orderData,
-            { headers: { token } }
-          );
-          if (response.data.success) {
-            setCartItems({}); //clearing cart data
-            navigate("/orders");
-          } else {
-            toast.error(response.data.message || "Failed to place order");
-          }
-          break;
-        default:
-          break;
+
+      if (method === "khalti") {
+        setShowKhalti(true);
+        return;
+      }
+
+      // Handle COD payment
+      if (method === "cod") {
+        const response = await axios.post(
+          backendUrl + "/api/order/place",
+          orderData,
+          { headers: { token } }
+        );
+        if (response.data.success) {
+          setCartItems({}); //clearing cart data
+          navigate("/orders");
+        } else {
+          toast.error(response.data.message || "Failed to place order");
+        }
       }
     } catch (err) {
       console.log(err);
+      toast.error("Something went wrong. Please try again.");
     }
   };
 
@@ -194,18 +256,18 @@ const PlaceOrder = () => {
           {/* -------------- Payment Method Selection -------------- */}
           <div className="flex gap-3 flex-col lg:flex-row ">
             <div
-              onClick={() => setMethod("razorpay")}
+              onClick={() => handlePaymentMethodChange("khalti")}
               className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
             >
               <p
                 className={`min-w-3.5 h-3.5 rounded-full border ${
-                  method === "razorpay" ? "bg-green-400" : ""
+                  method === "khalti" ? "bg-green-400" : ""
                 }`}
               ></p>
-              <img className="h-5 mx-4" src={assets.razorpay_logo} alt="" />
+              <img className="h-8 mx-4" src={assets.khalti_logo} alt="Khalti" />
             </div>
             <div
-              onClick={() => setMethod("cod")}
+              onClick={() => handlePaymentMethodChange("cod")}
               className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
             >
               <p
@@ -229,6 +291,14 @@ const PlaceOrder = () => {
           </div>
         </div>
       </div>
+
+      {showKhalti && method === "khalti" && (
+        <KhaltiPayment
+          amount={getCartAmount() + deliveryFee}
+          onSuccess={handleKhaltiSuccess}
+          onError={handleKhaltiError}
+        />
+      )}
     </form>
   );
 };

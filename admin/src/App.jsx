@@ -6,8 +6,7 @@ import Add from "./pages/Add";
 import Orders from "./pages/Orders";
 import Sidebar from "./components/Sidebar";
 import Login from "./components/Login.jsx";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Toaster } from 'react-hot-toast';
 
 export const currency = "₹"
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -21,7 +20,7 @@ const App = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <ToastContainer/>
+      <Toaster position="top-right" />
       {token === "" ? (
         <Login setToken={setToken} />
       ) : (

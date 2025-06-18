@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 const KhaltiPayment = ({ amount, onSuccess, onError }) => {
   const navigate = useNavigate();

@@ -15,11 +15,14 @@ const Cart = () => {
       for (const item in cartItems) {
         for (const size in cartItems[item]) {
           if (cartItems[item][size] > 0) {
-            tempData.push({
-              _id: item,
-              size: size,
-              quantity: cartItems[item][size],
-            });
+            const productExists = products.find(product => product._id === item);
+            if (productExists) {
+              tempData.push({
+                _id: item,
+                size: size,
+                quantity: cartItems[item][size],
+              });
+            }
           }
         }
       }
@@ -39,6 +42,11 @@ const Cart = () => {
             const productData = products.find(
               (product) => product._id === item._id
             );
+            
+            if (!productData) {
+              return null;
+            }
+            
             return (
               <div
                 key={index}

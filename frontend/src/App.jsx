@@ -38,7 +38,7 @@ function App() {
             border: '1px solid rgba(255, 255, 255, 0.1)',
           },
           success: {
-            duration: 4000,
+            duration: 3000,
             style: {
               background: 'linear-gradient(135deg, #10B981, #059669)',
               color: '#fff',
@@ -49,7 +49,7 @@ function App() {
             },
           },
           error: {
-            duration: 5000,
+            duration: 3000,
             style: {
               background: 'linear-gradient(135deg, #EF4444, #DC2626)',
               color: '#fff',
@@ -57,12 +57,6 @@ function App() {
             iconTheme: {
               primary: '#fff',
               secondary: '#EF4444',
-            },
-          },
-          loading: {
-            style: {
-              background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-              color: '#fff',
             },
           },
         }}

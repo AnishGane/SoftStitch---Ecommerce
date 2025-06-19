@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Login");
-  const {token,setToken,backendUrl,navigate} = useContext(ShopContext);
+  const {token,setToken,backendUrl,navigate, setUsername} = useContext(ShopContext);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,6 +18,7 @@ const Login = () => {
           if(response.data.success){
             setToken(response.data.token);
             localStorage.setItem("token",response.data.token);
+            localStorage.setItem("username", name);
             toast.success("Registration successful!");
             setCurrentState("Login");
           }else{
@@ -29,8 +30,11 @@ const Login = () => {
         if(response.data.success){
           setToken(response.data.token);
           localStorage.setItem("token",response.data.token);
+          if(response.data.username){
+            setUsername(response.data.username);
+            localStorage.setItem("username", response.data.username);
+          }
           toast.success("Logged in Successfully.");
-          // navigate("/");
         }else{
           toast.error(response.data.message || "Login failed");
         }
@@ -49,11 +53,19 @@ const Login = () => {
     if(token){
       navigate("/");
     }
+    const storedUsername = localStorage.getItem("username");
+    if(storedUsername){
+      setUsername(storedUsername);
+    }
   },[token]);
 
   useEffect(()=>{
     if(!token && localStorage.getItem("token")){
      setToken(localStorage.getItem("token"))
+    const storedUsername = localStorage.getItem("username");
+    if(storedUsername){
+      setUsername(storedUsername);
+    }
     }
   },[]);
 

@@ -4,7 +4,7 @@ import TrueFocus from "../lib/TrueFocus";
 
 const Hero = () => {
   return (
-    <div className="flex mt-3 flex-col sm:flex-row border-2 border-gray-500 shadow-[0px_6px_25px_rgba(0,0,0,0.25)]">
+    <div className="flex mt-3 flex-col sm:flex-row border-2 border-gray-500 ">
       {/* Hero Left Section */}
       <div className="w-full sm:w-1/2 flex items-center justify-center py-10 sm:py-0">
         <div className="text-[#414141]">

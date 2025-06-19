@@ -15,6 +15,7 @@ const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState("");
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
   const AddToCart = async (itemId, size) => {
@@ -200,6 +201,11 @@ const ShopContextProvider = (props) => {
 
   useEffect(() => {
     getProductData();
+    // Set username from localStorage if available
+    const storedUsername = localStorage.getItem("username");
+    if(storedUsername){
+      setUsername(storedUsername);
+    }
   }, []);
 
   useEffect(() => {
@@ -227,6 +233,8 @@ const ShopContextProvider = (props) => {
     backendUrl,
     token,
     setToken,
+    username,
+    setUsername
   };
 
   return (

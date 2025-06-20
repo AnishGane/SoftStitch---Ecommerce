@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
+import { FaGithub } from "react-icons/fa";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
@@ -36,7 +37,7 @@ const Navbar = () => {
 
       {/* Middle Nav */}
       {token ? (
-        <ul className="hidden sm:flex gap-8 text-md text-gray-700">
+        <ul className="hidden sm:flex gap-8 ml-28 text-md text-gray-700">
           <NavLink to="/" className="flex flex-col items-center gap-1">
             <p>HOME</p>
             <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
@@ -66,6 +67,8 @@ const Navbar = () => {
       {/* Right Nav */}
       {token && (
         <div className="flex items-center gap-8">
+          {/* Source Code */}
+          <p className="sm:flex items-center justify-center gap-2 border-2 border-black py-2 px-4 hover:text-white hover:bg-black transition-all ease-in-out duration-200 font-medium text-sm rounded-full cursor-pointer hidden" onClick={() => window.open("https://github.com/AnishGane/SoftStitch---Ecommerce", "_blank")}><FaGithub /> <span>Source Code</span></p>
           {/* Welcome message if logged in */}
           {token && username && (
             <span className="text-gray-700 border-2 border-black py-2 px-5 hover:text-white hover:bg-black transition-all ease-in-out duration-200 font-medium hidden sm:block">
@@ -201,17 +204,9 @@ const Navbar = () => {
           </div>
           {/* Welcome message if logged in */}
           {token && username && (
-            <span className="text-gray-700 absolute bottom-[10%] mb-3 w-full text-center text-lg font-medium sm:hidden block">
+            <span className="text-gray-700 absolute bottom-[10%] w-full text-center text-lg font-medium sm:hidden block">
               Welcome, {username.split(' ')[0]}
             </span>
-          )}
-          {token && (
-            <p
-              className="cursor-pointer text-gray-700 absolute bottom-[8%] w-full text-center font-medium sm:hidden block hover:text-black"
-              onClick={logout}
-            >
-              Logout
-            </p>
           )}
         </div>
       )}

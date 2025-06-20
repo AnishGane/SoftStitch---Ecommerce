@@ -11,7 +11,7 @@ const About = () => {
       </div>
 
       <div className='my-10 flex flex-col md:flex-row gap-16'>
-        <img src={assets.about_img} className='w-full sm:max-w-[450px]' alt="" />
+        <img src={assets.about_us_image} className='w-full h-[62vh] sm:max-w-[450px]' alt="" loading='lazy' />
         <div className='flex flex-col justify-center gap-6 md:w-2/4 text-gray-600'>
           <p className='text-justify'>Welcome to our premium clothing store, where style meets quality. Founded in 2024, we've been dedicated to providing our customers with the finest selection of contemporary fashion. Our carefully curated collection features pieces from both established designers and emerging talents, ensuring you always find something unique and on-trend.</p>
           <p className='text-justify'>At our core, we believe that fashion should be accessible, sustainable, and expressive. That's why we work directly with ethical manufacturers and source high-quality materials that stand the test of time. Our passionate team of fashion enthusiasts is always ready to help you discover pieces that not only look great but make you feel confident and comfortable. We're more than just a clothing store - we're a community that celebrates individual style and self-expression.</p>

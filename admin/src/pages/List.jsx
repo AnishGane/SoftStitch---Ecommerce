@@ -57,11 +57,11 @@ const List = ({token}) => {
         {/* ----------- List Table Items ------------ */}
         {list.map((item, index) => (
           <div className="grid gird-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center py-1 px-2 border gap-2 text-sm" key={index}>
-            <img src={item.image[0]} alt="" />
+            <img src={item.image[0]} className="w-38 h-38 object-cover" alt="" />
             <p>{item.name}</p>
             <p>{item.category}</p>
             <p>{currency}{item.price}</p>
-            <p onClick={()=>removeProduct(item._id)} className="text-right md:text-center cursor-pointer text-lg">X</p>
+            <p onClick={()=>removeProduct(item._id)} className="text-right md:text-center cursor-pointer text-lg text-orange-600">X</p>
           </div>
         ))}
       </div>

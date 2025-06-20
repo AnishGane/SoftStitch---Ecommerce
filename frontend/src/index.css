@@ -6,6 +6,11 @@ a.active hr {
   display: block;
 }
 
+::selection{
+  color: white;
+  background-color: black;
+}
+
 * {
   font-family: Outfit;
 }

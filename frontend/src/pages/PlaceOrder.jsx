@@ -31,6 +31,7 @@ const PlaceOrder = () => {
     country: "",
     phone: "",
   });
+  const [khaltiOrderInfo, setKhaltiOrderInfo] = useState(null);
 
   const onChangeHandler = (e) => {
     const name = e.target.name;
@@ -47,7 +48,6 @@ const PlaceOrder = () => {
   const handleKhaltiSuccess = async (payload) => {
     try {
       let orderItems = [];
-
       for (const items in cartItems) {
         for (const item in cartItems[items]) {
           if (cartItems[items][item] > 0) {
@@ -62,38 +62,33 @@ const PlaceOrder = () => {
           }
         }
       }
-
       let orderData = {
         address: formData,
         items: orderItems,
         amount: getCartAmount() + deliveryFee,
         paymentMethod: "khalti",
-        paymentDetails: payload
+        token: payload.token,
       };
-
       const response = await axios.post(
         backendUrl + "/api/order/khalti",
         orderData,
         { headers: { token } }
       );
-
       if (response.data.success) {
-        setCartItems({}); //clearing cart data
+        setCartItems({});
         toast.success("Payment successful and order placed!");
         navigate("/orders");
       } else {
         toast.error(response.data.message || "Failed to place order");
       }
     } catch (err) {
-      console.error(err);
       toast.error("Payment failed. Please try again.");
     }
   };
 
   const handleKhaltiError = (error) => {
-    console.error("Payment failed:", error);
     toast.error("Payment failed. Please try again.");
-    setShowKhalti(false); // Hide Khalti widget on error
+    setShowKhalti(false);
   };
 
   const onSubmitHandler = async (e) => {
@@ -292,7 +287,7 @@ const PlaceOrder = () => {
         </div>
       </div>
 
-      {showKhalti && method === "khalti" && (
+      {showKhalti && (
         <KhaltiPayment
           amount={getCartAmount() + deliveryFee}
           onSuccess={handleKhaltiSuccess}

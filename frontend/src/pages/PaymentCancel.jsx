@@ -1,16 +1,17 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const PaymentCancel = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    toast.error('Payment was cancelled');
+    toast.error("Payment was cancelled");
     // Redirect to home page after 2 seconds
-    setTimeout(() => {
-      navigate('/');
+    const timer = setTimeout(() => {
+      navigate("/");
     }, 2000);
+    return () => clearTimeout(timer);
   }, [navigate]);
 
   return (
@@ -23,4 +24,4 @@ const PaymentCancel = () => {
   );
 };
 
-export default PaymentCancel; 
+export default PaymentCancel;

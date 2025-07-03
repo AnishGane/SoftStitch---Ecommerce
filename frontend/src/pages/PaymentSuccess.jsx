@@ -1,26 +1,18 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get the token from URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-
-    if (token) {
-      // Show success message
-      toast.success('Payment successful!');
-      // Redirect to orders page after 2 seconds
-      setTimeout(() => {
-        navigate('/orders');
-      }, 2000);
-    } else {
-      toast.error('Invalid payment response');
-      navigate('/');
-    }
+    // Show success message
+    toast.success("Payment successful!");
+    // Redirect to orders page after 2 seconds
+    const timer = setTimeout(() => {
+      navigate("/orders");
+    }, 2000);
+    return () => clearTimeout(timer);
   }, [navigate]);
 
   return (
@@ -33,4 +25,4 @@ const PaymentSuccess = () => {
   );
 };
 
-export default PaymentSuccess; 
+export default PaymentSuccess;

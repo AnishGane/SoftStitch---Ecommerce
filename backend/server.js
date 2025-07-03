@@ -17,10 +17,10 @@ connectCloudinary();
 
 // CORS configuration
 const corsOptions = {
-  origin: ['http://localhost:5173', 'http://localhost:5174'], // Add your frontend URLs
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'token'],
-  credentials: true
+  origin: ["http://localhost:5173", "http://localhost:5174"], // Add your frontend URLs
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "token"],
+  credentials: true,
 };
 
 //middleware
@@ -34,18 +34,14 @@ app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 
-app.get("/", (req, res) => {
-  res.send("API Working");
-});
-
 // Khalti
 const KHALTI_BASE = process.env.KHALTI_BASE_URL; // sandbox or production
 const SECRET_KEY = process.env.KHALTI_SECRET_KEY;
-app.post('/api/khalti/initiate', async (req, res) => {
+app.post("/api/khalti/initiate", async (req, res) => {
   const payload = {
     return_url: req.body.return_url,
     website_url: req.body.website_url,
-    amount: req.body.amount,        // in paisa
+    amount: req.body.amount, // in paisa
     purchase_order_id: req.body.purchase_order_id,
     purchase_order_name: req.body.purchase_order_name,
     customer_info: req.body.customer_info,
@@ -59,11 +55,13 @@ app.post('/api/khalti/initiate', async (req, res) => {
     );
     res.json(response.data); // includes pidx & payment_url
   } catch (err) {
-    res.status(err.response?.status || 500).json(err.response?.data || { error: err.message });
+    res
+      .status(err.response?.status || 500)
+      .json(err.response?.data || { error: err.message });
   }
 });
 
-app.post('/api/khalti/verify', async (req, res) => {
+app.post("/api/khalti/verify", async (req, res) => {
   try {
     const { pidx } = req.body;
     const response = await axios.post(
@@ -73,8 +71,14 @@ app.post('/api/khalti/verify', async (req, res) => {
     );
     res.json(response.data); // includes status/state
   } catch (err) {
-    res.status(err.response?.status || 500).json(err.response?.data || { error: err.message });
+    res
+      .status(err.response?.status || 500)
+      .json(err.response?.data || { error: err.message });
   }
+});
+
+app.get("/", (req, res) => {
+  res.send("API Working");
 });
 
 app.listen(port, () => console.log(`Listening on localhost:${port}`));

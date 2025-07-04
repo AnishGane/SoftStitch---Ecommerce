@@ -5,11 +5,10 @@ import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import toast from "react-hot-toast";
-import KhaltiPayment from "../components/KhaltiPayment";
+import EsewaPayment from "../components/EsewaPayment";
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");
-  const [showKhalti, setShowKhalti] = useState(false);
   const {
     navigate,
     backendUrl,
@@ -31,7 +30,7 @@ const PlaceOrder = () => {
     country: "",
     phone: "",
   });
-  const [khaltiOrderInfo, setKhaltiOrderInfo] = useState(null);
+  const [showEsewa, setShowEsewa] = useState(false);
 
   const onChangeHandler = (e) => {
     const name = e.target.name;
@@ -42,53 +41,55 @@ const PlaceOrder = () => {
 
   const handlePaymentMethodChange = (selectedMethod) => {
     setMethod(selectedMethod);
-    setShowKhalti(false); // Reset Khalti widget when changing payment method
   };
 
-  const handleKhaltiSuccess = async (payload) => {
+  const handleEsewaSuccess = async (refId) => {
     try {
-      let orderItems = [];
-      for (const items in cartItems) {
-        for (const item in cartItems[items]) {
-          if (cartItems[items][item] > 0) {
-            const itemInfo = structuredClone(
-              products.find((product) => product._id === items)
-            );
-            if (itemInfo) {
-              itemInfo.size = item;
-              itemInfo.quantity = cartItems[items][item];
-              orderItems.push(itemInfo);
+      const orderId = localStorage.getItem("order_id");
+      if (orderId) {
+        // Fetch the order details if needed, or use stored data
+        const address = formData;
+        const amount = getCartAmount() + deliveryFee;
+        let orderItems = [];
+        for (const items in cartItems) {
+          for (const item in cartItems[items]) {
+            if (cartItems[items][item] > 0) {
+              const itemInfo = structuredClone(
+                products.find((product) => product._id === items)
+              );
+              if (itemInfo) {
+                itemInfo.size = item;
+                itemInfo.quantity = cartItems[items][item];
+                orderItems.push(itemInfo);
+              }
             }
           }
         }
-      }
-      let orderData = {
-        address: formData,
-        items: orderItems,
-        amount: getCartAmount() + deliveryFee,
-        paymentMethod: "khalti",
-        token: payload.token,
-      };
-      const response = await axios.post(
-        backendUrl + "/api/order/khalti",
-        orderData,
-        { headers: { token } }
-      );
-      if (response.data.success) {
+        await axios.post(
+          backendUrl + "/api/order/esewa",
+          {
+            userId: token,
+            items: orderItems,
+            amount,
+            address,
+            refId,
+          },
+          { headers: { token } }
+        );
         setCartItems({});
         toast.success("Payment successful and order placed!");
         navigate("/orders");
       } else {
-        toast.error(response.data.message || "Failed to place order");
+        toast.error("Order ID not found. Cannot update payment status.");
       }
     } catch (err) {
-      toast.error("Payment failed. Please try again.");
+      toast.error("Payment verification failed.");
     }
   };
 
-  const handleKhaltiError = (error) => {
-    toast.error("Payment failed. Please try again.");
-    setShowKhalti(false);
+  const handleEsewaError = (error) => {
+    setShowEsewa(false);
+    toast.error("eSewa payment failed. Please try again.");
   };
 
   const onSubmitHandler = async (e) => {
@@ -112,13 +113,29 @@ const PlaceOrder = () => {
       }
 
       let orderData = {
+        userId: token,
         address: formData,
         items: orderItems,
         amount: getCartAmount() + deliveryFee,
       };
 
-      if (method === "khalti") {
-        setShowKhalti(true);
+      if (method === "esewa") {
+        const response = await axios.post(
+          backendUrl + "/api/order/place",
+          {
+            ...orderData,
+            paymentMethod: "eSewa",
+            payment: false,
+            status: "Pending",
+          },
+          { headers: { token } }
+        );
+        if (response.data.success && response.data.orderId) {
+          setShowEsewa(true);
+          localStorage.setItem("order_id", response.data.orderId);
+        } else {
+          toast.error(response.data.message || "Failed to create order");
+        }
         return;
       }
 
@@ -251,15 +268,15 @@ const PlaceOrder = () => {
           {/* -------------- Payment Method Selection -------------- */}
           <div className="flex gap-3 flex-col lg:flex-row ">
             <div
-              onClick={() => handlePaymentMethodChange("khalti")}
+              onClick={() => handlePaymentMethodChange("esewa")}
               className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
             >
               <p
                 className={`min-w-3.5 h-3.5 rounded-full border ${
-                  method === "khalti" ? "bg-green-400" : ""
+                  method === "esewa" ? "bg-green-400" : ""
                 }`}
               ></p>
-              <img className="h-8 mx-4" src={assets.khalti_logo} alt="Khalti" />
+              <p className="text-green-600 text-sm font-medium mx-4">eSewa</p>
             </div>
             <div
               onClick={() => handlePaymentMethodChange("cod")}
@@ -287,11 +304,23 @@ const PlaceOrder = () => {
         </div>
       </div>
 
-      {showKhalti && (
-        <KhaltiPayment
+      {showEsewa && (
+        <EsewaPayment
           amount={getCartAmount() + deliveryFee}
-          onSuccess={handleKhaltiSuccess}
-          onError={handleKhaltiError}
+          taxAmount={0}
+          serviceCharge={0}
+          deliveryCharge={0}
+          transactionUUID={`order_${Date.now()}`}
+          productCode={
+            process.env.NODE_ENV === "production"
+              ? "YOUR_REAL_MERCHANT_CODE"
+              : "EPAYTEST"
+          }
+          backendUrl={backendUrl}
+          successUrl={window.location.origin + "/payment/success"}
+          failureUrl={window.location.origin + "/payment/cancel"}
+          onSuccess={handleEsewaSuccess}
+          onError={handleEsewaError}
         />
       )}
     </form>

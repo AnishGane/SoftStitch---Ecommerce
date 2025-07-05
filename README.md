@@ -257,7 +257,7 @@ This project is licensed under the ISC License.
 ### Screenshots
 
 #### Customer Pages
-![Home Page](image.png)
+![Home Page](Screenshot 2025-07-05 130524.png)
 *Modern landing page with hero banner and featured products*
 
 ![Product Collection](./screenshots/product-collection.png)

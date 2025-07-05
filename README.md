@@ -260,33 +260,34 @@ This project is licensed under the ISC License.
 ![Home Page](./screenshots/homepage.png)
 *Modern landing page with hero banner and featured products*
 
-![Product Collection](./screenshots/product-collection.png)
+![Product Collection](./screenshots/productcollection.png)
 *Browse all products with search and filtering*
 
-![Product Details](./screenshots/product-details.png)
+![Product Details](./screenshots/productdetail.png)
 *Individual product view with size selection and add to cart*
 
-![Shopping Cart](./screenshots/shopping-cart.png)
+![Shopping Cart](./screenshots/productcart.png)
 *Cart management with quantity controls and total calculation*
 
 ![Checkout](./screenshots/checkout.png)
 *Order placement with address form and payment options*
 
-![Login/Register](./screenshots/login-register.png)
+![Login/Register](./screenshots/loginregister.png)
 *Secure authentication forms*
 
 #### Admin Panel
-![Admin Dashboard](./screenshots/admin-dashboard.png)
-*Overview of orders, products, and sales*
+![Admin Login](./screenshots/adminlogin.png)
+*Secure admin authentication portal*
 
-![Product Management](./screenshots/product-management.png)
-*Add, edit, and delete products with image upload*
+![Admin Add Item](./screenshots/adminadditem.png)
+*Add new products with image upload and form validation*
 
-![Order Management](./screenshots/order-management.png)
+![Admin Product List](./screenshots/adminlistitem.png)
+*View and manage all products in a comprehensive list interface*
+
+![Order Management](./screenshots/adminorderitem.png)
 *View and update order status*
 
-![User Management](./screenshots/user-management.png)
-*Monitor user activities and data*
 
 ## 👨‍💻 Author
 

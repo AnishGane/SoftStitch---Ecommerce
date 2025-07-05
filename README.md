@@ -82,7 +82,7 @@ SoftStitch-Ecommerce Website/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/AnishGane/SoftStitch---Ecommerce.git
    cd SoftStitch-Ecommerce-Website
    ```
 
@@ -247,6 +247,29 @@ Built with Tailwind CSS for consistent styling across all devices.
 ## 📄 License
 
 This project is licensed under the ISC License.
+
+## 🌐 Live Demo
+
+### Website Links
+- **Frontend (Customer App)**: [https://softstitch-ecommerce.onrender.com](https://softstitch-ecommerce.onrender.com)
+- **Backend API**: [https://softstitch-backend.onrender.com](https://softstitch-backend.onrender.com)
+
+### Screenshots
+
+#### Customer Pages
+- **Home Page**: Modern landing page with hero banner and featured products
+- **Product Collection**: Browse all products with search and filtering
+- **Product Details**: Individual product view with size selection and add to cart
+- **Shopping Cart**: Cart management with quantity controls and total calculation
+- **Checkout**: Order placement with address form and payment options
+- **User Profile**: Order history and account management
+- **Login/Register**: Secure authentication forms
+
+#### Admin Panel
+- **Dashboard**: Overview of orders, products, and sales
+- **Product Management**: Add, edit, and delete products with image upload
+- **Order Management**: View and update order status
+- **User Management**: Monitor user activities and data
 
 ## 👨‍💻 Author
 

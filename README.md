@@ -257,19 +257,36 @@ This project is licensed under the ISC License.
 ### Screenshots
 
 #### Customer Pages
-- **Home Page**: Modern landing page with hero banner and featured products
-- **Product Collection**: Browse all products with search and filtering
-- **Product Details**: Individual product view with size selection and add to cart
-- **Shopping Cart**: Cart management with quantity controls and total calculation
-- **Checkout**: Order placement with address form and payment options
-- **User Profile**: Order history and account management
-- **Login/Register**: Secure authentication forms
+![Home Page](image.png)
+*Modern landing page with hero banner and featured products*
+
+![Product Collection](./screenshots/product-collection.png)
+*Browse all products with search and filtering*
+
+![Product Details](./screenshots/product-details.png)
+*Individual product view with size selection and add to cart*
+
+![Shopping Cart](./screenshots/shopping-cart.png)
+*Cart management with quantity controls and total calculation*
+
+![Checkout](./screenshots/checkout.png)
+*Order placement with address form and payment options*
+
+![Login/Register](./screenshots/login-register.png)
+*Secure authentication forms*
 
 #### Admin Panel
-- **Dashboard**: Overview of orders, products, and sales
-- **Product Management**: Add, edit, and delete products with image upload
-- **Order Management**: View and update order status
-- **User Management**: Monitor user activities and data
+![Admin Dashboard](./screenshots/admin-dashboard.png)
+*Overview of orders, products, and sales*
+
+![Product Management](./screenshots/product-management.png)
+*Add, edit, and delete products with image upload*
+
+![Order Management](./screenshots/order-management.png)
+*View and update order status*
+
+![User Management](./screenshots/user-management.png)
+*Monitor user activities and data*
 
 ## 👨‍💻 Author
 

@@ -311,11 +311,7 @@ const PlaceOrder = () => {
           serviceCharge={0}
           deliveryCharge={0}
           transactionUUID={`order_${Date.now()}`}
-          productCode={
-            process.env.NODE_ENV === "production"
-              ? "YOUR_REAL_MERCHANT_CODE"
-              : "EPAYTEST"
-          }
+          productCode="EPAYTEST"
           backendUrl={backendUrl}
           successUrl={window.location.origin + "/payment/success"}
           failureUrl={window.location.origin + "/payment/cancel"}

@@ -1,8 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 // import { products } from "../assets/assets";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { isTokenExpired } from "../lib/jwt";
 
 export const ShopContext = createContext();
 
@@ -17,6 +18,7 @@ const ShopContextProvider = (props) => {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const AddToCart = async (itemId, size) => {
     if (!size) {
@@ -153,7 +155,11 @@ const ShopContextProvider = (props) => {
 
       // Only update local state after successful API call
       setCartItems(cartData);
-      toast.success(quantity === 0 ? "Item removed from cart" : "Item quantity updated successfully");
+      toast.success(
+        quantity === 0
+          ? "Item removed from cart"
+          : "Item quantity updated successfully"
+      );
     } catch (error) {
       console.error("update to cart error:", error);
       toast.error(
@@ -189,7 +195,11 @@ const ShopContextProvider = (props) => {
 
   const getUserCart = async (token) => {
     try {
-      const response = await axios.post(backendUrl + "/api/cart/get", {}, { headers: { token } });
+      const response = await axios.post(
+        backendUrl + "/api/cart/get",
+        {},
+        { headers: { token } }
+      );
       if (response.data.success) {
         setCartItems(response.data.cartData);
       }
@@ -197,16 +207,39 @@ const ShopContextProvider = (props) => {
       console.log(err.message);
       toast.error(err.message);
     }
-  }
+  };
 
   useEffect(() => {
+    // Check token expiry on app load
+    const storedToken = localStorage.getItem("token");
+    if (storedToken && isTokenExpired(storedToken)) {
+      setToken("");
+      setUsername("");
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      navigate("/login");
+      toast.error("Session expired. Please log in again.");
+    }
     getProductData();
     // Set username from localStorage if available
     const storedUsername = localStorage.getItem("username");
-    if(storedUsername){
+    if (storedUsername) {
       setUsername(storedUsername);
     }
   }, []);
+
+  useEffect(() => {
+    // Check token expiry on every route change
+    const storedToken = localStorage.getItem("token");
+    if (storedToken && isTokenExpired(storedToken)) {
+      setToken("");
+      setUsername("");
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      navigate("/login");
+      toast.error("Session expired. Please log in again.");
+    }
+  }, [location]);
 
   useEffect(() => {
     if (!token && localStorage.getItem("token")) {
@@ -234,7 +267,7 @@ const ShopContextProvider = (props) => {
     token,
     setToken,
     username,
-    setUsername
+    setUsername,
   };
 
   return (

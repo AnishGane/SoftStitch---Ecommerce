@@ -2,11 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { FaEye } from "react-icons/fa";
+import { FaEyeLowVision } from "react-icons/fa6";
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Login");
   const { token, setToken, backendUrl, navigate, setUsername } =
     useContext(ShopContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -102,14 +105,27 @@ const Login = () => {
         placeholder="Email address"
         required
       />
-      <input
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-        type="password"
-        className="w-full px-3 py-2 border border-gray-800 outline-none"
-        placeholder="Password"
-        required
-      />
+      <div className="w-full flex relative">
+        <input
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+          type={showPassword ? "text" : "password"}
+          className="w-full px-3 py-2 border border-gray-800 outline-none"
+          placeholder="Password"
+          required
+        />
+        {!showPassword ? (
+          <FaEye
+            onClick={() => setShowPassword(true)}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+          />
+        ) : (
+          <FaEyeLowVision
+            onClick={() => setShowPassword(false)}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+          />
+        )}
+      </div>
 
       <div className="w-full flex justify-between text-sm mt-[-8px]">
         <p className="cursor-pointer">Forgot your password?</p>

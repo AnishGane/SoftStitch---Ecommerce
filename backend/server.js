@@ -20,7 +20,7 @@ const corsOptions = {
   origin: [
     "http://localhost:5173",
     "http://localhost:5174",
-    "http://192.168.0.116:5173/",
+    "http://192.168.0.116:5173",
     // "https://softstitch-ecommerce.onrender.com",
     // "https://softstitch-ecommerce-admin.onrender.com",
   ], // Add your frontend URLs

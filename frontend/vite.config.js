@@ -6,6 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [tailwindcss(), react()],
   server: {
+    host: "0.0.0.0",  // so mobile devices can access
     port: 5173,
     proxy: {
       '/api': {

@@ -3,6 +3,7 @@ import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import Title from "../components/Title";
 import ProductItem from "../components/ProductItem";
+import { fuzzyMatch } from "../lib/levenshteinDistance";
 
 const Collection = () => {
   const { products, search, showSearch } = useContext(ShopContext);
@@ -40,19 +41,26 @@ const Collection = () => {
   const applyFilter = () => {
     let productsCopy = products.slice();
 
-    // For Search Query
-    if (showSearch && search) {
-      productsCopy = productsCopy.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase())
-      );
+    // For Search Query with fuzzy matching
+    if (showSearch && search && search.trim()) {
+      const query = search.trim();
+
+      productsCopy = productsCopy.filter((item) => {
+        // Use improved fuzzy matching
+        // Checks exact match first, then substring match, then fuzzy similarity
+        // More lenient threshold (50%) for better typo tolerance
+        return fuzzyMatch(item.name, query, 50);
+      });
     }
 
+    // Category Filter
     if (category.length > 0) {
       productsCopy = productsCopy.filter((item) =>
         category.includes(item.category)
       );
     }
 
+    // Sub Category Filter
     if (subCategory.length > 0) {
       productsCopy = productsCopy.filter((item) =>
         subCategory.includes(item.subCategory)
@@ -63,19 +71,16 @@ const Collection = () => {
   };
 
   const sortProducts = () => {
-    let filterProductsCopy = filterProducts.slice();
-
-    switch (sortType) {
-      case "low-high":
-        setFilterProducts(filterProductsCopy.sort((a, b) => a.price - b.price));
-        break;
-      case "high-low":
-        setFilterProducts(filterProductsCopy.sort((a, b) => b.price - a.price));
-        break;
-      default:
-        applyFilter();
-        break;
+    if (sortType === "low-high" || sortType === "high-low") {
+      let filterProductsCopy = [...filterProducts]; // Create new array
+      if (sortType === "low-high") {
+        filterProductsCopy.sort((a, b) => a.price - b.price);
+      } else {
+        filterProductsCopy.sort((a, b) => b.price - a.price);
+      }
+      setFilterProducts(filterProductsCopy);
     }
+    // For "relevant" sort type, just reapply filters (handled by applyFilter)
   };
 
   useEffect(() => {

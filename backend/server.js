@@ -22,7 +22,6 @@ const corsOptions = {
     // "http://localhost:5174",
     // "http://192.168.0.116:5173",
     "https://soft-stitch-ecommerce.vercel.app",
-    // "https://softstitch-ecommerce-admin.onrender.com",
   ], // Add your frontend URLs
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "token"],
@@ -32,6 +31,7 @@ const corsOptions = {
 //middleware
 app.use(express.json());
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 //api endpoint
 

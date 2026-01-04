@@ -6,15 +6,14 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [tailwindcss(), react()],
   server: {
-    host: "0.0.0.0", // so mobile devices can access
+    host: "0.0.0.0",  // so mobile devices can access
     port: 5173,
     proxy: {
-      "/api": {
-        target:
-          "https://vercel.com/anishganes-projects/soft-stitch-ecommerce-backend/2JUsjHnrG4YpK9gLCLyT2JJo9Cgm",
+      '/api': {
+        target: 'http://localhost:4000',
         changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
+        secure: false
+      }
+    }
+  }
 });

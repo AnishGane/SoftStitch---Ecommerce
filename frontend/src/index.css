@@ -6,7 +6,7 @@ a.active hr {
   display: block;
 }
 
-::selection{
+::selection {
   color: white;
   background-color: black;
 }

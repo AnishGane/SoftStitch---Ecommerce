@@ -41,11 +41,6 @@ app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/esewa", esewaRoute);
 
-app.use((req, res, next) => {
-  console.log(req.method, req.url);
-  next();
-});
-
 app.get("/", (req, res) => {
   res.send("API Working");
 });

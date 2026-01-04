@@ -21,7 +21,7 @@ const corsOptions = {
     // "http://localhost:5173",
     // "http://localhost:5174",
     // "http://192.168.0.116:5173",
-    "https://vercel.com/anishganes-projects/soft-stitch-ecommerce/CnB2o8SrihyNfjvvJMVe1ewoHQee",
+    "https://soft-stitch-ecommerce.vercel.app",
     // "https://softstitch-ecommerce-admin.onrender.com",
   ], // Add your frontend URLs
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],

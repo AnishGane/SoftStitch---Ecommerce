@@ -5,16 +5,18 @@ A full-stack e-commerce platform built with React, Node.js,express, and MongoDB,
 ## 🌟 Features
 
 ### Customer Features
+
 - **User Authentication**: Secure login/signup with JWT tokens
 - **Product Browsing**: Browse products with search and filtering
 - **Shopping Cart**: Add/remove items with size selection
 - **Order Management**: Place orders and track order history
-- **Payment Integration**: 
+- **Payment Integration**:
   - Cash on Delivery (COD)
   - eSewa payment gateway (Nepal)
 - **Responsive Design**: Mobile-friendly interface with Tailwind CSS
 
 ### Admin Features
+
 - **Product Management**: Add, edit, and delete products
 - **Order Management**: View and update order status
 - **User Management**: Monitor user activities
@@ -23,6 +25,7 @@ A full-stack e-commerce platform built with React, Node.js,express, and MongoDB,
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **React 19** - UI framework
 - **Vite** - Build tool and dev server
 - **Tailwind CSS** - Styling
@@ -32,6 +35,7 @@ A full-stack e-commerce platform built with React, Node.js,express, and MongoDB,
 - **Framer Motion** - Animations
 
 ### Backend
+
 - **Node.js** - Runtime environment
 - **Express.js** - Web framework
 - **MongoDB** - Database
@@ -42,6 +46,7 @@ A full-stack e-commerce platform built with React, Node.js,express, and MongoDB,
 - **Cloudinary** - Image storage
 
 ### Payment Integration
+
 - **eSewa** - Digital payment gateway (Nepal)
 - **HMAC-SHA256** - Payment signature verification
 
@@ -74,6 +79,7 @@ SoftStitch-Ecommerce Website/
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js (v18 or higher)
 - MongoDB (local or Atlas)
 - npm or yarn package manager
@@ -81,18 +87,21 @@ SoftStitch-Ecommerce Website/
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/AnishGane/SoftStitch---Ecommerce.git
    cd SoftStitch-Ecommerce-Website
    ```
 
 2. **Backend Setup**
+
    ```bash
    cd backend
    npm install
    ```
 
 3. **Frontend Setup**
+
    ```bash
    cd ../frontend
    npm install
@@ -122,6 +131,7 @@ ESEWA_SECRET_KEY=your_esewa_secret_key
 ### Running the Application
 
 1. **Start Backend Server**
+
    ```bash
    cd backend
    npm run server  # Development with nodemon
@@ -130,6 +140,7 @@ ESEWA_SECRET_KEY=your_esewa_secret_key
    ```
 
 2. **Start Frontend (Customer App)**
+
    ```bash
    cd frontend
    npm run dev
@@ -142,6 +153,7 @@ ESEWA_SECRET_KEY=your_esewa_secret_key
    ```
 
 The applications will be available at:
+
 - Backend API: `http://localhost:4000`
 - Frontend: `http://localhost:5173`
 - Admin Panel: `http://localhost:5174`
@@ -149,36 +161,43 @@ The applications will be available at:
 ## 🔧 API Endpoints
 
 ### Authentication
+
 - `POST /api/user/register` - User registration
 - `POST /api/user/login` - User login
 - `POST /api/user/admin/login` - Admin login
 
 ### Products
+
 - `GET /api/product/list` - Get all products
 - `POST /api/product/add` - Add new product (Admin)
 - `PUT /api/product/update/:id` - Update product (Admin)
 - `DELETE /api/product/delete/:id` - Delete product (Admin)
 
 ### Cart
+
 - `POST /api/cart/add` - Add item to cart
 - `POST /api/cart/remove` - Remove item from cart
 - `GET /api/cart/list` - Get user's cart
 
 ### Orders
+
 - `POST /api/order/place` - Place new order
 - `POST /api/order/esewa` - Place order with eSewa payment
 - `GET /api/order/user` - Get user's orders
 - `GET /api/order/list` - Get all orders (Admin)
 
 ### Payment
+
 - `POST /api/esewa/signature` - Generate eSewa payment signature
 
 ## 💳 Payment Integration
 
 ### eSewa Integration
+
 The application integrates with eSewa payment gateway for digital payments in Nepal:
 
 1. **Payment Flow**:
+
    - User selects eSewa payment method
    - System generates payment signature
    - User is redirected to eSewa payment page
@@ -191,24 +210,27 @@ The application integrates with eSewa payment gateway for digital payments in Ne
 
 ## 🚀 Deployment
 
-### Backend Deployment (Render)
-1. Connect your GitHub repository to Render
+### Backend Deployment (Vercel)
+
+1. Connect your GitHub repository to Vercel
 2. Set build command: `npm install`
 3. Set start command: `npm start`
-4. Add environment variables in Render dashboard
+4. Add environment variables in Vercel dashboard
 5. Deploy
 
-### Frontend Deployment (Render)
-1. Connect your GitHub repository to Render
+### Frontend Deployment (Vercel)
+
+1. Connect your GitHub repository to Vercel
 2. Set build command: `npm install && npm run build`
 3. Set publish directory: `dist`
 4. Add environment variables if needed
 5. Deploy
 
 ### Environment Variables for Production
+
 ```env
 # Frontend
-VITE_BACKEND_URL=https://your-backend.onrender.com
+VITE_BACKEND_URL=https://your-backend.vercel.app
 
 # Backend
 MONGODB_URI=your_mongodb_atlas_uri
@@ -230,6 +252,7 @@ ESEWA_SECRET_KEY=your_esewa_secret_key
 ## 📱 Responsive Design
 
 The application is fully responsive and optimized for:
+
 - Desktop computers
 - Tablets
 - Mobile phones
@@ -251,43 +274,45 @@ This project is licensed under the ISC License.
 ## 🌐 Live Demo
 
 ### Website Links
-- **Frontend (Customer App)**: [https://softstitch-ecommerce.onrender.com](https://softstitch-ecommerce.onrender.com)
-- **Backend API**: [https://softstitch-backend.onrender.com](https://softstitch-backend.onrender.com)
+
+- **Frontend (Customer App)**: [https://soft-stitch-ecommerce.vercel.app/](https://soft-stitch-ecommerce.vercel.app/)
+- **Admin Panel**: [https://soft-stitch-ecommerce-admin.vercel.app/](https://soft-stitch-ecommerce-admin.vercel.app/)
 
 ### Screenshots
 
 #### Customer Pages
+
 ![Home Page](./screenshots/homepage.png)
-*Modern landing page with hero banner and featured products*
+_Modern landing page with hero banner and featured products_
 
 ![Product Collection](./screenshots/productcollection.png)
-*Browse all products with search and filtering*
+_Browse all products with search and filtering_
 
 ![Product Details](./screenshots/productdetail.png)
-*Individual product view with size selection and add to cart*
+_Individual product view with size selection and add to cart_
 
 ![Shopping Cart](./screenshots/productcart.png)
-*Cart management with quantity controls and total calculation*
+_Cart management with quantity controls and total calculation_
 
 ![Checkout](./screenshots/checkout.png)
-*Order placement with address form and payment options*
+_Order placement with address form and payment options_
 
 ![Login/Register](./screenshots/loginregister.png)
-*Secure authentication forms*
+_Secure authentication forms_
 
 #### Admin Panel
+
 ![Admin Login](./screenshots/adminlogin.png)
-*Secure admin authentication portal*
+_Secure admin authentication portal_
 
 ![Admin Add Item](./screenshots/adminadditem.png)
-*Add new products with image upload and form validation*
+_Add new products with image upload and form validation_
 
 ![Admin Product List](./screenshots/adminlistitem.png)
-*View and manage all products in a comprehensive list interface*
+_View and manage all products in a comprehensive list interface_
 
 ![Order Management](./screenshots/adminorderitem.png)
-*View and update order status*
-
+_View and update order status_
 
 ## 👨‍💻 Author
 
@@ -298,11 +323,12 @@ This project is licensed under the ISC License.
 - eSewa for payment gateway integration
 - Cloudinary for image storage
 - MongoDB Atlas for database hosting
-- Render for deployment platform
+- Vercel for deployment platform
 
 ## 📞 Support
 
 For support and questions:
+
 - Create an issue in the GitHub repository
 - Contact: anishgane10@gmail.com
 
